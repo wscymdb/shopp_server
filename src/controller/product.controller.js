@@ -64,5 +64,17 @@ class ProductController {
       data: res,
     }
   }
+
+  async checkByLabel(ctx, next) {
+    const { label_id } = ctx.params
+
+    let res = await productService.checkByLabel(label_id)
+    if (res.length) res = res
+    ctx.body = {
+      code: 0,
+      msg: 'success',
+      data: res,
+    }
+  }
 }
 module.exports = new ProductController()

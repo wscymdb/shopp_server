@@ -5,7 +5,8 @@ class ProductService {
   // 查询
   async check(payload) {
     const { page, row } = payload
-    const sql = `SELECT * FROM product WHERE is_delete = ? ORDER BY id DESC LIMIT ? OFFSET ?`
+    const sql = `SELECT product.id, product.title, product.subtitle, product.current_price, product.previous_price, product.banner_path, product.detail_path, product.freight, product.createAt, product.updateAt, product.label_id, labels.name FROM product LEFT JOIN labels ON product.label_id = labels.id WHERE product.is_delete = ? ORDER BY product.id DESC LIMIT ? OFFSET ? `
+    // const sql = `SELECT * FROM product WHERE is_delete = ? ORDER BY id DESC LIMIT ? OFFSET ?`
     const [value] = await connection.execute(sql, [
       0,
       String(row),
@@ -17,6 +18,12 @@ class ProductService {
   async checkById(id) {
     const sql = `SELECT * FROM product WHERE is_delete = ? AND id = ?`
     const [value] = await connection.execute(sql, [0, id])
+    return value
+  }
+  // 根据标签查询商品
+  async checkByLabel(label_id) {
+    const sql = `SELECT * FROM product WHERE is_delete = ? AND label_id = ?`
+    const [value] = await connection.execute(sql, [0, label_id])
     return value
   }
   async checkTotal() {
@@ -36,8 +43,10 @@ class ProductService {
         previous_price,
         banner_path,
         detail_path,
+        label_id,
       } = info
-      const sql = `INSERT INTO product(title,subtitle,freight,current_price,previous_price,banner_path,detail_path) VALUES(?,?,?,?,?,?,?)`
+      console.log(label_id)
+      const sql = `INSERT INTO product(title,subtitle,freight,current_price,previous_price,banner_path,detail_path,label_id ) VALUES(?,?,?,?,?,?,?,?)`
       const [value] = await connection.execute(sql, [
         title,
         subtitle,
@@ -46,6 +55,7 @@ class ProductService {
         previous_price,
         banner_path,
         detail_path,
+        label_id,
       ])
       if (value.affectedRows > 0) {
         return true
@@ -69,9 +79,11 @@ class ProductService {
         previous_price,
         banner_path,
         detail_path,
+        label_id,
         id,
       } = info
-      const sql = `UPDATE  product SET title=?,subtitle=?, freight=?, current_price=?, previous_price=?,banner_path = ?, detail_path = ? WHERE id=?`
+      console.log(label_id)
+      const sql = `UPDATE  product SET title=?,subtitle=?, freight=?, current_price=?, previous_price=?,banner_path = ?, detail_path = ?, label_id=? WHERE id=?`
       const [value] = await connection.execute(sql, [
         title,
         subtitle,
@@ -80,6 +92,7 @@ class ProductService {
         previous_price,
         banner_path,
         detail_path,
+        label_id,
         id,
       ])
       if (value.affectedRows > 0) {

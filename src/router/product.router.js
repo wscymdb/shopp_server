@@ -8,6 +8,12 @@ productRouter.post('/list', verifyToken, productController.check)
 
 productRouter.get('/list/:id', verifyToken, productController.checkById)
 
+productRouter.get(
+  '/label/:label_id',
+  verifyToken,
+  productController.checkByLabel
+)
+
 productRouter.post('/create', verifyToken, productController.create)
 
 productRouter.put('/update', verifyToken, productController.update)
