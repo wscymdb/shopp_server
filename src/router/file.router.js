@@ -11,5 +11,6 @@ fileRouter.post(
   handleProductBanner,
   fileController.createProductBanner
 )
+fileRouter.post('/deleteStaticImg', verifyToken, fileController.deleteFile)
 
 module.exports = fileRouter

@@ -26,7 +26,7 @@ class ProductService {
   }
 
   // 新增
-  async create(info) {
+  async create(info, ctx) {
     try {
       const {
         title,
@@ -59,17 +59,27 @@ class ProductService {
     }
   }
   // 修改
-  async update(info) {
+  async update(info, ctx) {
     try {
-      const { title, subtitle, freight, current_price, previous_price, id } =
-        info
-      const sql = `UPDATE  product SET title=?,subtitle=?, freight=?, current_price=?, previous_price=? WHERE id=?`
+      const {
+        title,
+        subtitle,
+        freight,
+        current_price,
+        previous_price,
+        banner_path,
+        detail_path,
+        id,
+      } = info
+      const sql = `UPDATE  product SET title=?,subtitle=?, freight=?, current_price=?, previous_price=?,banner_path = ?, detail_path = ? WHERE id=?`
       const [value] = await connection.execute(sql, [
         title,
         subtitle,
         freight,
         current_price,
         previous_price,
+        banner_path,
+        detail_path,
         id,
       ])
       if (value.affectedRows > 0) {

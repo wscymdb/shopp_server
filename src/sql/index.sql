@@ -11,7 +11,8 @@ CREATE TABLE
         subtitle VARCHAR(255),
         current_price DECIMAL(5, 2),
         previous_price DECIMAL(5, 2),
-        banner_paths VARCHAR(255) COMMENT '商品图片(多个)',
+        banner_path TEXT COMMENT '商品图片(多个)',
+        detail_path TEXT COMMENT '商品详情图',
         freight TINYINT COMMENT '运费',
         is_delete TINYINT DEFAULT 0,
         createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -49,3 +50,22 @@ CREATE TABLE
         createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
+
+-- labels 标签表
+
+CREATE TABLE
+    IF NOT EXISTS labels(
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        name VARCHAR(22),
+        icon TEXT,
+        createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+
+-- 给product表添加外键 和labels关联起来
+
+ALTER TABLE product ADD label_id INT;
+
+ALTER TABLE product
+ADD
+    FOREIGN KEY(label_id) REFERENCES labels(id);

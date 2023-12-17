@@ -5,7 +5,7 @@ class ProductController {
   async create(ctx, next) {
     const info = ctx.request.body
 
-    const res = await productService.create(info)
+    const res = await productService.create(info, ctx)
     if (res) {
       ctx.body = {
         code: 0,
@@ -16,7 +16,7 @@ class ProductController {
   }
   async update(ctx, next) {
     const info = ctx.request.body
-    const res = await productService.update(info)
+    const res = await productService.update(info, ctx)
     if (res) {
       ctx.body = {
         code: 0,
@@ -27,7 +27,7 @@ class ProductController {
   }
   async delete(ctx, next) {
     const { id } = ctx.params
-    const res = await productService.delete(id)
+    const res = await productService.delete(id, ctx)
     if (res) {
       ctx.body = {
         code: 0,
@@ -56,7 +56,8 @@ class ProductController {
 
   async checkById(ctx, next) {
     const { id } = ctx.params
-    const res = await productService.checkById(id)
+    let res = await productService.checkById(id)
+    if (res.length) res = res[0]
     ctx.body = {
       code: 0,
       msg: 'success',
