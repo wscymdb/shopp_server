@@ -70,3 +70,42 @@ ALTER TABLE product ADD label_id INT;
 ALTER TABLE product
 ADD
     FOREIGN KEY(label_id) REFERENCES labels(id);
+
+-- 创建购物车表
+CREATE TABLE
+    IF NOT EXISTS shopping_cart(
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        user_id INT,
+        product_id INT,
+        specification TEXT COMMENT '规格',
+        is_delete TINYINT DEFAULT 0,
+        createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+
+-- 订单表
+CREATE TABLE
+    IF NOT EXISTS order_detail(
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        user_id INT,
+        product_id INT,
+        address_id INT,
+        count INT DEFAULT 1,
+        is_delete TINYINT DEFAULT 0,
+        status TINYINT DEFAULT 0 COMMENT '状态 0 代发货 1待收货 2已签收',
+        createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+
+-- 地址表
+CREATE TABLE
+    IF NOT EXISTS address(
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        user_id INT,
+        phone VARCHAR(32),
+        name VARCHAR(255),
+        content TEXT,
+        is_delete TINYINT DEFAULT 0,
+        createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
