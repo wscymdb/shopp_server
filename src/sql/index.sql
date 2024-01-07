@@ -21,23 +21,23 @@ CREATE TABLE
 
 -- 插入一条假数据
 
-insert INTO
-    product(
-        title,
-        subtitle,
-        img_paths,
-        current_price,
-        previous_price,
-        freight
-    )
-VALUES (
-        '糖心丑苹果',
-        '糖心丑苹果，不能只看外表，内心很甜',
-        'a.png,b.png',
-        28.88,
-        38.88,
-        9
-    );
+-- insert INTO
+--     product(
+--         title,
+--         subtitle,
+--         img_paths,
+--         current_price,
+--         previous_price,
+--         freight
+--     )
+-- VALUES (
+--         '糖心丑苹果',
+--         '糖心丑苹果，不能只看外表，内心很甜',
+--         'a.png,b.png',
+--         28.88,
+--         38.88,
+--         9
+--     );
 
 -- 用户表
 
@@ -45,6 +45,7 @@ CREATE TABLE
     IF NOT EXISTS `users`(
         id INT PRIMARY KEY AUTO_INCREMENT,
         name VARCHAR(30) NOT NULL UNIQUE,
+        nick_name VARCHAR(255),
         password VARCHAR(70) NOT NULL,
         avatar_url VARCHAR(255),
         createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

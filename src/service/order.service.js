@@ -28,6 +28,18 @@ class OrderService {
     return value
   }
 
+  async checkType({ id, status }, ctx) {
+    let sql = `SELECT od.id, od.status, p.id as pId, p.title, p.subtitle, p.current_price,p.banner_path FROM order_detail as od LEFT JOIN product as p ON od.product_id = p.id WHERE od.is_delete = ? AND p.is_delete = ? AND od.user_id = ? AND status = ? ORDER BY od.id DESC`
+    if (status === '2') {
+      sql = `SELECT od.id, od.status, p.id as pId, p.title, p.subtitle, p.current_price,p.banner_path FROM order_detail as od LEFT JOIN product as p ON od.product_id = p.id WHERE od.is_delete = ? AND p.is_delete = ? AND od.user_id = ?  ORDER BY od.id DESC`
+      const [value] = await connection.execute(sql, [0, 0, id])
+      return value
+    } else {
+      const [value] = await connection.execute(sql, [0, 0, id, status])
+      return value
+    }
+  }
+
   async delete(id, ctx) {
     const sql = `UPDATE order_detail SET is_delete = ? WHERE id = ?`
     const [value] = await connection.execute(sql, [1, id])

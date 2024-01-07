@@ -4,7 +4,7 @@ const { UNKNOW_ERROR } = require('../config/error.config')
 class AddressService {
   async create(info, ctx) {
     const { user_id, content, name, phone } = info
-    console.log(info)
+    console.log(info, 1111)
     const sql = `INSERT INTO address(user_id, content,name,phone)VALUES(?,?,?,?)`
     const [value] = await connection.execute(sql, [
       user_id,

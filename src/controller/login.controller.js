@@ -3,7 +3,7 @@ const { PRIVATEKEY } = require('../config/secret')
 
 class LoginController {
   sign(ctx, next) {
-    const { id, name } = ctx.user
+    const { id, name, nick_name } = ctx.user
 
     // 颁发token
     const token = jwt.sign({ id, name }, PRIVATEKEY, {
@@ -14,7 +14,7 @@ class LoginController {
     ctx.body = {
       code: 0,
       msg: '登陆成功～',
-      data: { id, name, token },
+      data: { id, name, nick_name, token },
     }
   }
 }

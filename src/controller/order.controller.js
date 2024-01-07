@@ -25,6 +25,16 @@ class OrderController {
       data: res,
     }
   }
+  async checkType(ctx, next) {
+    const info = ctx.request.body
+
+    const res = await OrderCartService.checkType(info)
+    ctx.body = {
+      code: 0,
+      msg: 'success',
+      data: res,
+    }
+  }
 
   async delete(ctx, next) {
     const { id } = ctx.params

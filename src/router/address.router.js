@@ -8,7 +8,6 @@ const addressRouter = new KoaRouter({ prefix: '/address' })
 addressRouter.get('/:id', verifyToken, AddressController.check)
 
 addressRouter.post('/create', verifyToken, AddressController.create)
-
 // 删除
 addressRouter.delete('/:id', verifyToken, AddressController.delete)
 
