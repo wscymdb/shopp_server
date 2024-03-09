@@ -7,7 +7,8 @@ class FileController {
     const files = ctx.request.files
     const url = []
     files.forEach((item) => {
-      url.push(getFullUrl(item.filename))
+      // url.push(getFullUrl(item.filename))
+      url.push(item.filename)
     })
     ctx.body = {
       code: 0,

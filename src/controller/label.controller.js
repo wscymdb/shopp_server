@@ -1,8 +1,14 @@
 const { UNKNOW_ERROR } = require('../config/error.config')
 const labelService = require('../service/label.service')
+const { getFullUrl } = require('../utils/utils')
 class LabelController {
   async check(ctx, next) {
-    const res = await labelService.check()
+    let res = await labelService.check()
+
+    res = res.map((item) => {
+      item.icon = getFullUrl(item.icon)
+      return item
+    })
 
     ctx.body = {
       code: 0,
@@ -13,7 +19,8 @@ class LabelController {
 
   async checkById(ctx, next) {
     const { id } = ctx.params
-    const [res] = await labelService.checkById(id, ctx)
+    let [res] = await labelService.checkById(id, ctx)
+    res.icon = getFullUrl(res.icon)
 
     ctx.body = {
       code: 0,
@@ -53,7 +60,6 @@ class LabelController {
   async create(ctx, next) {
     const { name, icon } = ctx.request.body
     if (!name || !icon) return ctx.app.emit('error', UNKNOW_ERROR, ctx)
-
     const len = await labelService.check()
     if (len.length >= 8)
       return (ctx.body = {

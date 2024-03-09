@@ -21,11 +21,18 @@ class OrderService {
     }
   }
 
-  async check(id, ctx) {
-    console.log(id)
-    const sql = `SELECT od.id, od.status, p.id as pId, p.title, p.subtitle, p.current_price FROM order_detail as od LEFT JOIN product as p ON od.product_id = p.id WHERE od.is_delete = ? AND od.user_id = ? ORDER BY od.id DESC`
-    const [value] = await connection.execute(sql, [0, id])
-    return value
+  async check(payload, ctx) {
+    const { id, title } = payload
+    console.log(title)
+    if (title) {
+      const sql = `SELECT od.id, od.status, p.id as pId, p.title, p.subtitle, p.current_price FROM order_detail as od LEFT JOIN product as p ON od.product_id = p.id WHERE od.is_delete = ? AND od.user_id = ? AND p.title LIKE ? ORDER BY od.id DESC`
+      const [value] = await connection.execute(sql, [0, id, `%${title}%`])
+      return value
+    } else {
+      const sql = `SELECT od.id, od.status, p.id as pId, p.title, p.subtitle, p.current_price FROM order_detail as od LEFT JOIN product as p ON od.product_id = p.id WHERE od.is_delete = ? AND od.user_id = ? ORDER BY od.id DESC`
+      const [value] = await connection.execute(sql, [0, id])
+      return value
+    }
   }
 
   async checkType({ id, status }, ctx) {

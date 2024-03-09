@@ -1,5 +1,6 @@
 const { UNKNOW_ERROR } = require('../config/error.config')
 const productService = require('../service/product.service')
+const { getFullUrl } = require('../utils/utils')
 
 class ProductController {
   async create(ctx, next) {
@@ -38,13 +39,22 @@ class ProductController {
   }
 
   async check(ctx, next) {
-    let { page, row } = ctx.request.body
+    let { page, row, title } = ctx.request.body
     // 处理分页
     if (!page) page = 1
     if (!row) row = 10
     page = row * (page - 1)
 
-    const res = await productService.check({ page, row })
+    let res = await productService.check({ page, row, title })
+
+    console.log(title)
+
+    res = res.map((item) => {
+      item.banner_path = getFullUrl(item.banner_path)
+      item.detail_path = getFullUrl(item.detail_path)
+      return item
+    })
+
     const [{ total }] = await productService.checkTotal()
     ctx.body = {
       code: 0,
@@ -57,7 +67,13 @@ class ProductController {
   async checkById(ctx, next) {
     const { id } = ctx.params
     let res = await productService.checkById(id)
-    if (res.length) res = res[0]
+
+    if (res.length) {
+      res = res[0]
+      res.banner_path = getFullUrl(res.banner_path)
+      res.detail_path = getFullUrl(res.detail_path)
+      console.log(res, 123)
+    }
     ctx.body = {
       code: 0,
       msg: 'success',
@@ -69,7 +85,13 @@ class ProductController {
     const { label_id } = ctx.params
 
     let res = await productService.checkByLabel(label_id)
-    if (res.length) res = res
+
+    res = res.map((item) => {
+      item.banner_path = getFullUrl(item.banner_path)
+      item.detail_path = getFullUrl(item.detail_path)
+      return item
+    })
+
     ctx.body = {
       code: 0,
       msg: 'success',

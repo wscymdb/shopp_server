@@ -4,15 +4,28 @@ const { UNKNOW_ERROR } = require('../config/error.config')
 class ProductService {
   // 查询
   async check(payload) {
-    const { page, row } = payload
-    const sql = `SELECT product.id, product.title, product.subtitle, product.current_price, product.previous_price, product.banner_path, product.detail_path, product.freight, product.createAt, product.updateAt, product.label_id, labels.name FROM product LEFT JOIN labels ON product.label_id = labels.id WHERE product.is_delete = ? ORDER BY product.id DESC LIMIT ? OFFSET ? `
+    const { page, row, title } = payload
+    let sql = `SELECT product.id, product.title, product.subtitle, product.current_price, product.previous_price, product.banner_path, product.detail_path, product.freight, product.createAt, product.updateAt, product.label_id, labels.name FROM product LEFT JOIN labels ON product.label_id = labels.id WHERE product.is_delete = ? ORDER BY product.id DESC LIMIT ? OFFSET ? `
+
+    if (title) {
+      sql = `SELECT product.id, product.title, product.subtitle, product.current_price, product.previous_price, product.banner_path, product.detail_path, product.freight, product.createAt, product.updateAt, product.label_id, labels.name FROM product LEFT JOIN labels ON product.label_id = labels.id WHERE product.is_delete = ? AND product.title LIKE ? ORDER BY product.id DESC LIMIT ? OFFSET ? `
+
+      const [value] = await connection.execute(sql, [
+        0,
+        `%${title}%`,
+        String(row),
+        String(page),
+      ])
+      return value
+    } else {
+      const [value] = await connection.execute(sql, [
+        0,
+        String(row),
+        String(page),
+      ])
+      return value
+    }
     // const sql = `SELECT * FROM product WHERE is_delete = ? ORDER BY id DESC LIMIT ? OFFSET ?`
-    const [value] = await connection.execute(sql, [
-      0,
-      String(row),
-      String(page),
-    ])
-    return value
   }
   // 根据id查询商品
   async checkById(id) {
@@ -45,7 +58,7 @@ class ProductService {
         detail_path,
         label_id,
       } = info
-      console.log(label_id)
+      console.log(info)
       const sql = `INSERT INTO product(title,subtitle,freight,current_price,previous_price,banner_path,detail_path,label_id ) VALUES(?,?,?,?,?,?,?,?)`
       const [value] = await connection.execute(sql, [
         title,
