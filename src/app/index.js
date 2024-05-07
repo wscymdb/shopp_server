@@ -9,7 +9,10 @@ const registerRouters = require('../router')
 
 // 应用中间件
 app.use(bodyParser())
-app.use(static('./uploads'))
+app.use(static('uploads'))
+app.use(static('public'))
 registerRouters(app)
+
+// 设置代理
 
 module.exports = app

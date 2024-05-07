@@ -67,12 +67,13 @@ class ProductController {
   async checkById(ctx, next) {
     const { id } = ctx.params
     let res = await productService.checkById(id)
+    // console.log(res)
 
     if (res.length) {
       res = res[0]
       res.banner_path = getFullUrl(res.banner_path)
       res.detail_path = getFullUrl(res.detail_path)
-      console.log(res, 123)
+      // console.log(res, 123)
     }
     ctx.body = {
       code: 0,
